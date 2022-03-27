@@ -1,0 +1,38 @@
+@baseUrl = https://localhost:7000
+
+### GET ALL
+
+GET {{baseUrl}}/items
+
+### GET SINGLE
+@getSingleId = bba62708-7eab-4a10-8510-9472afeb25f4
+
+GET {{baseUrl}}/items/{{getSingleId}}
+
+### POST
+
+POST {{baseUrl}}/items
+Content-Type: application/json
+
+{
+    "name": "test 2",
+    "description": "test 2",
+    "price": 11
+}
+
+### PUT
+@updateId = bba62708-7eab-4a10-8510-9472afeb25f4
+
+PUT {{baseUrl}}/items/{{updateId}}
+Content-Type: application/json
+
+{
+    "name": "test",
+    "description": "my description",
+    "price": 11
+}
+
+### DELETE
+@deleteId = id
+
+DELETE {{baseUrl}}/items/{{deleteId}}

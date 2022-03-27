@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo
+    container_name: play.catalog.db
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodbdata:/data/db
+    networks:
+      - learnmicroservices
+
+networks:
+  learnmicroservices:
+    name: learnmicroservices
+
+volumes:
+  mongodbdata:
