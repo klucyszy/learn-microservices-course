@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Play.Catalog.Service", "Play.Catalog\src\Play.Catalog.Service\Play.Catalog.Service.csproj", "{18F26CB0-57CB-4C28-AD74-62EAF4AFAC1E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Play.Catalog", "Play.Catalog", "{83D93A18-388E-4377-A9F1-553E7A066F8D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Play.Inventory", "Play.Inventory", "{97DC9548-179C-4FB1-8826-C4DE26769705}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Play.Common", "Play.Common", "{FAF802A2-EFDC-4226-9B5A-70B1E682102C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Play.Common", "Play.Common\src\Play.Common\Play.Common.csproj", "{7C424700-D8F7-4A99-B913-AFE977F5A211}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Play.Catalog.Contracts", "Play.Catalog\src\Play.Catalog.Contracts\Play.Catalog.Contracts.csproj", "{2771CFA5-EADA-48CA-9797-BDA936F0D597}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Play.Inventory.Service", "Play.Inventory\src\Play.Inventory.Service\Play.Inventory.Service.csproj", "{21874C7F-B6C0-4918-A28E-DEE14DDCA16C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18F26CB0-57CB-4C28-AD74-62EAF4AFAC1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18F26CB0-57CB-4C28-AD74-62EAF4AFAC1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18F26CB0-57CB-4C28-AD74-62EAF4AFAC1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18F26CB0-57CB-4C28-AD74-62EAF4AFAC1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C424700-D8F7-4A99-B913-AFE977F5A211}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C424700-D8F7-4A99-B913-AFE977F5A211}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C424700-D8F7-4A99-B913-AFE977F5A211}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C424700-D8F7-4A99-B913-AFE977F5A211}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2771CFA5-EADA-48CA-9797-BDA936F0D597}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2771CFA5-EADA-48CA-9797-BDA936F0D597}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2771CFA5-EADA-48CA-9797-BDA936F0D597}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2771CFA5-EADA-48CA-9797-BDA936F0D597}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21874C7F-B6C0-4918-A28E-DEE14DDCA16C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21874C7F-B6C0-4918-A28E-DEE14DDCA16C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21874C7F-B6C0-4918-A28E-DEE14DDCA16C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21874C7F-B6C0-4918-A28E-DEE14DDCA16C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7C424700-D8F7-4A99-B913-AFE977F5A211} = {FAF802A2-EFDC-4226-9B5A-70B1E682102C}
+		{18F26CB0-57CB-4C28-AD74-62EAF4AFAC1E} = {83D93A18-388E-4377-A9F1-553E7A066F8D}
+		{2771CFA5-EADA-48CA-9797-BDA936F0D597} = {83D93A18-388E-4377-A9F1-553E7A066F8D}
+		{21874C7F-B6C0-4918-A28E-DEE14DDCA16C} = {97DC9548-179C-4FB1-8826-C4DE26769705}
+	EndGlobalSection
+EndGlobal

@@ -9,7 +9,7 @@ GET {{baseUrl}}/items/{{userId}}
 ### POST
 @grantItemUserId = 3fa85f64-5717-4562-b3fc-2c963f66afa6
 @grantItemCatalogItemId = {{$guid}}
-@grantItemCatalogItemId = fe20dc2b-bc8f-40c5-95fb-83609ac15ee8
+@grantItemCatalogItemId = 135795ba-4a30-43d0-9d7e-914847896d13
 
 POST {{baseUrl}}/items
 Content-Type: application/json
@@ -17,5 +17,5 @@ Content-Type: application/json
 {
     "userId": "{{grantItemUserId}}",
     "catalogItemId": "{{grantItemCatalogItemId}}",
-    "quantity": 99
+    "quantity": 1
 }

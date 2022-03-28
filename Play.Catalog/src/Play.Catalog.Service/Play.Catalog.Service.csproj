@@ -11,4 +11,25 @@
     <PackageReference Include="Play.Common" Version="1.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Play.Catalog.Contracts\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Play.Catalog.Contracts\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Play.Catalog.Contracts\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Play.Catalog.Contracts\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Play.Catalog.Contracts\obj\Play.Catalog.Contracts.csproj.nuget.dgspec.json" />
+    <_ContentIncludedByDefault Remove="Play.Catalog.Contracts\obj\project.assets.json" />
+  </ItemGroup>
+
 </Project>
