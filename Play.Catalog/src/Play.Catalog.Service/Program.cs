@@ -3,6 +3,7 @@ using Play.Common.MassTransit;
 using Play.Common.Mongo;
 using Play.Common.Settings;
 
+var AllowedOriginSetting = "AllowedOrigin";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -31,6 +32,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors(builder =>
+    {
+        builder.WithOrigins(app.Configuration[AllowedOriginSetting])
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
 }
 
 app.UseHttpsRedirection();
