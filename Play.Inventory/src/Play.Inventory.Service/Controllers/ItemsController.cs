@@ -12,13 +12,14 @@ public class ItemsController : ControllerBase
 {
     private const string UnknownText = "unknown";
     
-    private readonly IRepository<InventoryItem> _repository;
-    private readonly CatalogClient _catalogClient;
+    private readonly IRepository<InventoryItem> _inventoryItemsRepository;
+    private readonly IRepository<CatalogItem> _catalogItemsRepository;
 
-    public ItemsController(IRepository<InventoryItem> repository, CatalogClient catalogClient)
+    public ItemsController(IRepository<InventoryItem> inventoryItemsRepository,
+        IRepository<CatalogItem> catalogItemsRepository)
     {
-        _repository = repository;
-        _catalogClient = catalogClient;
+        _inventoryItemsRepository = inventoryItemsRepository;
+        _catalogItemsRepository = catalogItemsRepository;
     }
 
     [HttpGet("{id}")]
@@ -29,9 +30,12 @@ public class ItemsController : ControllerBase
             return BadRequest();
         }
 
-        var catalogItems = await _catalogClient.GetCatalogItemsAsync();
-        var inventoryItems = await _repository
+        var inventoryItems = await _inventoryItemsRepository
             .GetAllAsync(i => i.UserId == id);
+        var catalogItemsIds = inventoryItems.Select(i => i.CatalogItemId);
+        var catalogItems = await _catalogItemsRepository
+            .GetAllAsync(c => catalogItemsIds.Contains(c.Id));
+        
 
         var items = inventoryItems.Select(i =>
         {
@@ -46,14 +50,14 @@ public class ItemsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> PostAsync(GrantItemDto item)
     {
-        var inventoryItem = await _repository
+        var inventoryItem = await _inventoryItemsRepository
             .GetAsync(i => i.UserId == item.UserId && i.CatalogItemId == item.CatalogItemId);
 
         if (inventoryItem != null)
         {
             inventoryItem.Quantity += item.Quantity;
 
-            await _repository.UpdateAsync(inventoryItem);
+            await _inventoryItemsRepository.UpdateAsync(inventoryItem);
             
             return NoContent();
         }
@@ -67,7 +71,7 @@ public class ItemsController : ControllerBase
             Quantity = item.Quantity,
         };
 
-        await _repository.CreateAsync(newInventoryItem);
+        await _inventoryItemsRepository.CreateAsync(newInventoryItem);
 
         return Created(string.Empty, new { Id = newInventoryItem.Id });
     }

@@ -15,21 +15,21 @@ POST {{baseUrl}}/items
 Content-Type: application/json
 
 {
-    "name": "test 2",
-    "description": "test 2",
+    "name": "item 1",
+    "description": "item 1",
     "price": 11
 }
 
 ### PUT
-@updateId = bba62708-7eab-4a10-8510-9472afeb25f4
+@updateId = 1ad57678-0229-453e-a089-00cdf9dcef93
 
 PUT {{baseUrl}}/items/{{updateId}}
 Content-Type: application/json
 
 {
-    "name": "test",
-    "description": "my description",
-    "price": 11
+    "name": "item 1",
+    "description": "updated item 1",
+    "price": 1
 }
 
 ### DELETE

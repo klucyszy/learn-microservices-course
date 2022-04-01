@@ -7,29 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-    <PackageReference Include="Play.Common" Version="1.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+    <PackageReference Include="Play.Common" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Play.Catalog.Contracts\**" />
+    <ProjectReference Include="..\Play.Catalog.Contracts\Play.Catalog.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Remove="Play.Catalog.Contracts\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Play.Catalog.Contracts\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Play.Catalog.Contracts\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Play.Catalog.Contracts\obj\Play.Catalog.Contracts.csproj.nuget.dgspec.json" />
-    <_ContentIncludedByDefault Remove="Play.Catalog.Contracts\obj\project.assets.json" />
+    <Folder Include="Settings" />
   </ItemGroup>
 
 </Project>

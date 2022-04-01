@@ -1,3 +1,4 @@
+using Play.Common.MassTransit;
 using Play.Common.Mongo;
 using Play.Common.Settings;
 using Play.Inventory.Service.Clients;
@@ -12,19 +13,15 @@ var serviceSettings = builder.Configuration.GetSection(nameof(ServiceSettings)).
 
 builder.Services
     .AddMongo(builder.Configuration, serviceSettings.ServiceName)
-    .AddMongoRepository<InventoryItem>("inventoryItems");
+    .AddMongoRepository<InventoryItem>("inventoryItems")
+    .AddMongoRepository<CatalogItem>("catalogItems");
+
+builder.Services.AddMassTransitWithRabbitMq(builder.Configuration, serviceSettings.ServiceName);
 
 builder.Services.AddHttpClient<CatalogClient>(client =>
 {
     client.BaseAddress = new Uri("https://localhost:7000");
 });
-    // .AddTransientHttpErrorPolicy(builder =>
-    // {
-    //     builder.WaitAndRetryAsync(
-    //         5,
-    //         retryAttemp => TimeSpan.FromSeconds(Math.Pow(2, retryAttemp)));
-    // })
-    // .AddPolicyHandler();
 
 builder.Services.AddControllers(opts =>
 {

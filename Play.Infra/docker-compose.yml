@@ -10,10 +10,21 @@ services:
       - mongodbdata:/data/db
     networks:
       - learnmicroservices
-
+  
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: play.rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    hostname: rabbitmq
+      
 networks:
   learnmicroservices:
     name: learnmicroservices
 
 volumes:
   mongodbdata:
+  rabbitmqdata:
