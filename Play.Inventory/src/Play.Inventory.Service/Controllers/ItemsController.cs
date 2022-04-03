@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Play.Common.Repositories.Abstractions;
 using Play.Inventory.Service.Clients;
@@ -6,6 +7,7 @@ using Play.Inventory.Service.Entities;
 
 namespace Play.Inventory.Service.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("items")]
 public class ItemsController : ControllerBase

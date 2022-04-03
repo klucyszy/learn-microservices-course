@@ -5,32 +5,21 @@
 GET {{baseUrl}}/users
 
 ### GET SINGLE
-@getSingleId = bba62708-7eab-4a10-8510-9472afeb25f4
+@getSingleId = 63084a3f-60f1-443d-9b21-1d3dd68e10bf
 
-sGET {{baseUrl}}/users/{{getSingleId}}
-
-### POST
-
-POST {{baseUrl}}/items
-Content-Type: application/json
-
-{
-    "name": "item 1",
-    "description": "item 1",
-    "price": 11
-}
+GET {{baseUrl}}/users/{{getSingleId}}
 
 ### PUT
-@updateId = 1ad57678-0229-453e-a089-00cdf9dcef93
+@updateUserId = 63084a3f-60f1-443d-9b21-1d3dd68e10bf
 
-PUT {{baseUrl}}/items/{{updateId}}
+PUT {{baseUrl}}/users/{{updateUserId}}
 Content-Type: application/json
 
 {
-    "name": "item 1",
-    "description": "updated item 1",
-    "price": 1
+    "email": "klucyszyn1995@gmail.com",
+    "gil": 100
 }
+
 
 ### DELETE
 @deleteId = id

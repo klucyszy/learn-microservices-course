@@ -1,4 +1,5 @@
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Play.Catalog.Contracts;
 using Play.Catalog.Service.Dtos;
@@ -7,6 +8,7 @@ using Play.Common.Repositories.Abstractions;
 
 namespace Play.Catalog.Service.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("items")]
 public class ItemsController : ControllerBase

@@ -1,3 +1,5 @@
+using IdentityServer4;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Play.Identity.Service.Dtos;
@@ -5,6 +7,7 @@ using Play.Identity.Service.Entities;
 
 namespace Play.Identity.Service.Controllers;
 
+[Authorize(Policy = IdentityServerConstants.LocalApi.PolicyName)]
 [ApiController]
 [Route("users")]
 public class UsersController : ControllerBase

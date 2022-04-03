@@ -1,3 +1,4 @@
+using Play.Common.Identity;
 using Play.Common.MassTransit;
 using Play.Common.Mongo;
 using Play.Common.Settings;
@@ -16,6 +17,8 @@ builder.Services
     .AddMongo(builder.Configuration, serviceSettings.ServiceName)
     .AddMongoRepository<InventoryItem>("inventoryItems")
     .AddMongoRepository<CatalogItem>("catalogItems");
+
+builder.Services.AddJwtBearerAuthentication();
 
 builder.Services.AddMassTransitWithRabbitMq(builder.Configuration, serviceSettings.ServiceName);
 
@@ -49,7 +52,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
