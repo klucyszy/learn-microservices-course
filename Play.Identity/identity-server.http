@@ -1,0 +1,5 @@
+@baseUrl = https://localhost:7020
+
+### OPEN ID CONFIG
+
+GET {{baseUrl}}/.well-known/openid-configuration
