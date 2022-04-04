@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Play.Catalog.Service;
 using Play.Catalog.Service.Entities;
 using Play.Common.Identity;
 using Play.Common.MassTransit;
@@ -15,6 +15,21 @@ var serviceSettings = builder.Configuration.GetSection(nameof(ServiceSettings)).
 builder.Services
     .AddMongo(builder.Configuration, serviceSettings.ServiceName)
     .AddMongoRepository<Item>("items");
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(Policies.Read, policy =>
+    {
+        policy.RequireRole("Admin");
+        policy.RequireClaim("scope", "catalog.readaccess", "catalog.fullaccess");
+    });
+    
+    options.AddPolicy(Policies.Write, policy =>
+    {
+        policy.RequireRole("Admin");
+        policy.RequireClaim("scope", "catalog.writeaccess", "catalog.fullaccess");
+    });
+});
 
 builder.Services.AddMassTransitWithRabbitMq(builder.Configuration, serviceSettings.ServiceName);
 

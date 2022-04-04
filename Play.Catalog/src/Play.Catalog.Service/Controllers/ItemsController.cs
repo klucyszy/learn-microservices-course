@@ -8,7 +8,6 @@ using Play.Common.Repositories.Abstractions;
 
 namespace Play.Catalog.Service.Controllers;
 
-[Authorize]
 [ApiController]
 [Route("items")]
 public class ItemsController : ControllerBase
@@ -23,6 +22,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policies.Read)]
     public async Task<IEnumerable<ItemDto>> GetAsync()
     {
         var items = await _repository.GetAllAsync();
@@ -30,6 +30,8 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    
+    [Authorize(Policies.Read)]
     public async Task<ActionResult<ItemDto>> GetByIdAsync(Guid id)
     {
         var item = await _repository.GetAsync(id);
@@ -43,6 +45,8 @@ public class ItemsController : ControllerBase
     }
 
     [HttpPost]
+    
+    [Authorize(Policies.Write)]
     public async Task<ActionResult<ItemDto>> PostAsync(CreateItemDto createItemDto)
     {
         var item = new Item
@@ -62,6 +66,8 @@ public class ItemsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    
+    [Authorize(Policies.Write)]
     public async Task<ActionResult> PutAsync(Guid id, UpdateItemDto updateItemDto)
     {
         var existingItem = await _repository.GetAsync(id);
@@ -83,6 +89,8 @@ public class ItemsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    
+    [Authorize(Policies.Write)]
     public async Task<IActionResult> DeleteAsync(Guid id)
     {
         var item = await _repository.GetAsync(id);

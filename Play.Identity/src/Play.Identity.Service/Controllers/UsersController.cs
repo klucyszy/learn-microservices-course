@@ -7,7 +7,7 @@ using Play.Identity.Service.Entities;
 
 namespace Play.Identity.Service.Controllers;
 
-[Authorize(Policy = IdentityServerConstants.LocalApi.PolicyName)]
+[Authorize(Policy = IdentityServerConstants.LocalApi.PolicyName, Roles = Roles.Admin)]
 [ApiController]
 [Route("users")]
 public class UsersController : ControllerBase

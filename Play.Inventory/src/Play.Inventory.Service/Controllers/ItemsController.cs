@@ -1,5 +1,8 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Play.Common.Repositories.Abstractions;
 using Play.Inventory.Service.Clients;
 using Play.Inventory.Service.Dtos;
@@ -7,7 +10,6 @@ using Play.Inventory.Service.Entities;
 
 namespace Play.Inventory.Service.Controllers;
 
-[Authorize]
 [ApiController]
 [Route("items")]
 public class ItemsController : ControllerBase
@@ -25,8 +27,19 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<InventoryItemDto>>> GetAsync(Guid id)
     {
+        var currentUserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+        var parseSuccess = Guid.TryParse(currentUserId, out var guidCurrentUserId);
+        if (id != guidCurrentUserId)
+        {
+            if (!User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+        }
+        
         if (id == Guid.Empty)
         {
             return BadRequest();
@@ -50,6 +63,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> PostAsync(GrantItemDto item)
     {
         var inventoryItem = await _inventoryItemsRepository

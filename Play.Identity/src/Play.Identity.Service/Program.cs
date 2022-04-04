@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization.Serializers;
 using Play.Common.Mongo.Settings;
 using Play.Common.Settings;
 using Play.Identity.Service.Entities;
+using Play.Identity.Service.HostedServices;
 using Play.Identity.Service.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,8 @@ var identityServerSettings = builder.Configuration
     .GetSection(nameof(IdentityServerSettings)).Get<IdentityServerSettings>();
 
 BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
+
+builder.Services.Configure<IdentitySettings>(builder.Configuration.GetSection(nameof(IdentitySettings)));
 
 builder.Services.AddDefaultIdentity<ApplicationUser>()
     .AddRoles<ApplicationRole>()
@@ -31,8 +34,9 @@ builder.Services.AddIdentityServer()
     .AddDeveloperSigningCredential();
 
 builder.Services.AddLocalApiAuthentication();
-
 builder.Services.AddControllers();
+builder.Services.AddHostedService<IdentitySeedHostedService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
