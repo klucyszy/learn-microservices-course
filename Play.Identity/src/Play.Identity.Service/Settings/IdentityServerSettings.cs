@@ -11,6 +11,7 @@ public class IdentityServerSettings
     public IReadOnlyCollection<IdentityResource> Resources => new IdentityResource[]
     {
         new IdentityResources.OpenId(),
-        new IdentityResources.Profile()
+        new IdentityResources.Profile(),
+        new IdentityResource("roles", new[] {"role"})
     };
 }

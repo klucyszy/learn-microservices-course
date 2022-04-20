@@ -7,6 +7,7 @@ using Play.Identity.Service.Entities;
 using Play.Identity.Service.HostedServices;
 using Play.Identity.Service.Settings;
 
+var AllowedOriginSetting = "AllowedOrigin";
 var builder = WebApplication.CreateBuilder(args);
 
 var serviceSetting = builder.Configuration
@@ -48,6 +49,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors(builder =>
+    {
+        builder.WithOrigins(app.Configuration[AllowedOriginSetting])
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
 }
 
 app.UseHttpsRedirection();
