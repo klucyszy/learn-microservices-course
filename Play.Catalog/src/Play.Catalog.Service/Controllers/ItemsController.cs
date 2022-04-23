@@ -59,7 +59,7 @@ public class ItemsController : ControllerBase
         };
         
         await _repository.CreateAsync(item);
-        await _publishEndpoint.Publish(new CatalogItemCreated(item.Id, item.Name, item.Description));
+        await _publishEndpoint.Publish(new CatalogItemCreated(item.Id, item.Name, item.Description, item.Price));
         
         var nameofGet = nameof(GetByIdAsync);
         return CreatedAtAction(nameofGet, new {Id = item.Id}, item);
@@ -83,7 +83,7 @@ public class ItemsController : ControllerBase
 
         await _repository.UpdateAsync(existingItem);
         await _publishEndpoint.Publish(new CatalogItemUpdated(existingItem.Id,
-            existingItem.Name, existingItem.Description));
+            existingItem.Name, existingItem.Description, existingItem.Price));
         
         return NoContent();
     }
