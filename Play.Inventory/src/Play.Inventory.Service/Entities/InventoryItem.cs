@@ -9,4 +9,5 @@ public class InventoryItem : IEntity
     public Guid CatalogItemId { get; set; }
     public int Quantity { get; set; }
     public DateTimeOffset AcquiredDate { get; set; }
+    public HashSet<Guid> MessageIds { get; set; } = new();
 }

@@ -24,21 +24,24 @@ public class PurchaseController : ControllerBase
     public async Task<IActionResult> PostAsync([FromBody] SubmitPurchaseDto request)
     {
         var userId = User.FindFirstValue("sub");
-        var correlationId = Guid.NewGuid();
         
-        var message = new PurchaseRequested(Guid.Parse(userId), request.ItemId.Value, request.Quantity, correlationId);
+        var message = new PurchaseRequested(
+            Guid.Parse(userId),
+            request.ItemId.Value,
+            request.Quantity,
+            request.IdempotencyId.Value);
         
         await _endpoint.Publish(message);
-        return AcceptedAtAction(nameof(GetStatusAsync), new { correlationId }, new { correlationId });
+        return AcceptedAtAction(nameof(GetStatusAsync), new { request.IdempotencyId.Value }, new { request.IdempotencyId.Value });
     }
     
-    [HttpGet("status/{correlationId}")]
-    public async Task<ActionResult<PurchaseDto>> GetStatusAsync(Guid correlationId)
+    [HttpGet("status/{idempotencyId}")]
+    public async Task<ActionResult<PurchaseDto>> GetStatusAsync(Guid idempotencyId)
     {
         var userId = User.FindFirstValue("sub");
         
         var response = await _requestClient.GetResponse<PurchaseState>(
-            new GetPurchaseState(correlationId));
+            new GetPurchaseState(idempotencyId));
 
         var purchaseState = response.Message;
         return Ok(new PurchaseDto(
@@ -49,6 +52,6 @@ public class PurchaseController : ControllerBase
             purchaseState.CurrentState,
             purchaseState.ErrorMessage,
             purchaseState.Received,
-            purchaseState.Updated));
+            purchaseState.LastUpdated));
     }
 }

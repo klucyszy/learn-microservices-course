@@ -29,10 +29,16 @@ public class GrantItemsConsumer : IConsumer<GrantItems>
         
         var inventoryItem = await _inventoryItemsRepository
             .GetAsync(i => i.UserId == message.UserId && i.CatalogItemId == message.CatalogItemId);
-
-        if (inventoryItem is null)
+        
+        if (inventoryItem is not null)
         {
+            if (inventoryItem.MessageIds.Contains(context.MessageId.Value))
+            {
+                await context.Publish(new InventoryItemsGranted(message.CorrelationId));
+            }
+            
             inventoryItem.Quantity += message.Quantity;
+            inventoryItem.MessageIds.Add(context.MessageId.Value);
 
             await _inventoryItemsRepository.UpdateAsync(inventoryItem);
         }
@@ -46,6 +52,8 @@ public class GrantItemsConsumer : IConsumer<GrantItems>
                 AcquiredDate = DateTimeOffset.UtcNow,
                 Quantity = message.Quantity,
             };
+
+            newInventoryItem.MessageIds.Add(context.MessageId.Value);
 
             await _inventoryItemsRepository.CreateAsync(newInventoryItem);
         }

@@ -26,11 +26,18 @@ public class DebitGilConsumer : IConsumer<DebitGil>
         }
         
         user.Gil -= message.Gil;
+
+        if (user.MessageIds.Contains(context.MessageId.Value))
+        {
+            await context.Publish(new GilDebited(message.CorrelationId));
+        }
         
         if (user.Gil < 0)
         {
             throw new NotEnoughGilException(message.UserId, message.Gil);
         }
+
+        user.MessageIds.Add(context.MessageId.Value);
         
         await _userManager.UpdateAsync(user);
         

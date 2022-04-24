@@ -1,9 +1,16 @@
+using System.Reflection;
+using GreenPipes;
 using MassTransit;
 using Play.Common.Identity;
 using Play.Common.MassTransit;
 using Play.Common.Mongo;
 using Play.Common.Mongo.Settings;
 using Play.Common.Settings;
+using Play.Identity.Contracts;
+using Play.Inventory.Contracts;
+using Play.Trading.Service.Entities;
+using Play.Trading.Service.Exceptions;
+using Play.Trading.Service.Settings;
 using Play.Trading.Service.StateMachines;
 
 var AllowedOriginSetting = "AllowedOrigin";
@@ -13,16 +20,27 @@ var builder = WebApplication.CreateBuilder(args);
 
 var serviceSettings = builder.Configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
 var mongoDbSettings = builder.Configuration.GetSection(nameof(MongoSettings)).Get<MongoSettings>();
+var queueSettings = builder.Configuration.GetSection(nameof(QueueSettings)).Get<QueueSettings>();
 
 builder.Services
-    .AddMongo(builder.Configuration, serviceSettings.ServiceName);
+    .AddMongo(builder.Configuration, serviceSettings.ServiceName)
+    .AddMongoRepository<CatalogItem>("catalogItems");
 
 builder.Services.AddJwtBearerAuthentication();
 
 builder.Services.AddMassTransit(configure =>
 {
-    configure.UsingPlayEconomyRabbitMq(builder.Configuration, serviceSettings.ServiceName);
-    configure.AddSagaStateMachine<PurchaseStateMachine, PurchaseState>()
+    configure.UsingPlayEconomyRabbitMq(builder.Configuration, serviceSettings.ServiceName,
+        retryCfg =>
+        {
+            retryCfg.Interval(3, TimeSpan.FromSeconds(5));
+            retryCfg.Ignore<UnknownItemException>();
+        });
+    configure.AddConsumers(Assembly.GetEntryAssembly());
+    configure.AddSagaStateMachine<PurchaseStateMachine, PurchaseState>(sagaCfg =>
+        {
+            sagaCfg.UseInMemoryOutbox();
+        })
         .MongoDbRepository(mongoRepository =>
         {
             mongoRepository.Connection = mongoDbSettings.ConnectionString;
@@ -30,6 +48,10 @@ builder.Services.AddMassTransit(configure =>
             mongoRepository.CollectionName = "purchases";
         });
 });
+
+EndpointConvention.Map<GrantItems>(new Uri(queueSettings.GrantItemsQueueAddress));
+EndpointConvention.Map<DebitGil>(new Uri(queueSettings.DebitGilQueueAddress));
+EndpointConvention.Map<SubstractItems>(new Uri(queueSettings.SubstractItemsQueueAddress));
 
 builder.Services.AddMassTransitHostedService();
 builder.Services.AddGenericRequestClient();
