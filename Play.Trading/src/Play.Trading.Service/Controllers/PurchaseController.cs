@@ -2,6 +2,7 @@ using System.Security.Claims;
 using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Play.Trading.Service.Models;
 using Play.Trading.Service.StateMachines;
 
 namespace Play.Trading.Service.Controllers;
@@ -21,7 +22,7 @@ public class PurchaseController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> PostAsync([FromBody] SubmitPurchaseDto request)
+    public async Task<ActionResult> PostAsync([FromBody] SubmitPurchaseDto request)
     {
         var userId = User.FindFirstValue("sub");
         
@@ -32,7 +33,9 @@ public class PurchaseController : ControllerBase
             request.IdempotencyId.Value);
         
         await _endpoint.Publish(message);
-        return AcceptedAtAction(nameof(GetStatusAsync), new { request.IdempotencyId.Value }, new { request.IdempotencyId.Value });
+        return AcceptedAtAction(nameof(GetStatusAsync),
+            new { idempotencyId = request.IdempotencyId.Value },
+            new { idempotencyId = request.IdempotencyId.Value });
     }
     
     [HttpGet("status/{idempotencyId}")]

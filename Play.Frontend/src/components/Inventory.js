@@ -27,7 +27,7 @@ export class Inventory extends Component {
     }
 
     const token = await authService.getAccessToken();
-    fetch(`${window.INVENTORY_ITEMS_API_URL}/${userId}`, {
+    fetch(`${window.INVENTORY_ITEMS_API_URL}?userId=${userId}`, {
       headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
     })
       .then(response => response.json())

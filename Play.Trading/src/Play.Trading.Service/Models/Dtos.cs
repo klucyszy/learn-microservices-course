@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Play.Trading.Service.StateMachines;
+namespace Play.Trading.Service.Models;
 
 public record SubmitPurchaseDto(
     [Required] Guid? ItemId,
@@ -16,3 +16,14 @@ public record PurchaseDto(
     string Reason,
     DateTimeOffset Received,
     DateTimeOffset Updated);
+    
+public record StoreItemDto(
+    Guid Id,
+    string Name,
+    string Description,
+    decimal Price,
+    int OwnedQuantity);
+    
+public record StoreDto(
+    IEnumerable<StoreItemDto> Items,
+    decimal UserGil);

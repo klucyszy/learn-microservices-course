@@ -1,8 +1,10 @@
 using System.Security.Claims;
+using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Play.Common.Repositories.Abstractions;
+using Play.Inventory.Contracts;
 using Play.Inventory.Service.Dtos;
 using Play.Inventory.Service.Entities;
 
@@ -16,12 +18,14 @@ public class ItemsController : ControllerBase
     
     private readonly IRepository<InventoryItem> _inventoryItemsRepository;
     private readonly IRepository<CatalogItem> _catalogItemsRepository;
+    private readonly IPublishEndpoint _endpoint;
 
     public ItemsController(IRepository<InventoryItem> inventoryItemsRepository,
-        IRepository<CatalogItem> catalogItemsRepository)
+        IRepository<CatalogItem> catalogItemsRepository, IPublishEndpoint endpoint)
     {
         _inventoryItemsRepository = inventoryItemsRepository;
         _catalogItemsRepository = catalogItemsRepository;
+        _endpoint = endpoint;
     }
 
     [HttpGet("{id}")]
@@ -86,6 +90,11 @@ public class ItemsController : ControllerBase
         };
 
         await _inventoryItemsRepository.CreateAsync(newInventoryItem);
+        
+        await _endpoint.Publish(new InventoryItemUpdated(
+            inventoryItem.UserId,
+            inventoryItem.CatalogItemId,
+            inventoryItem.Quantity));
 
         return Created(string.Empty, new { Id = newInventoryItem.Id });
     }

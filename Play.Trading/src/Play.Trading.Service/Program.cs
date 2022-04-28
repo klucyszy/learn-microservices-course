@@ -1,6 +1,7 @@
 using System.Reflection;
 using GreenPipes;
 using MassTransit;
+using Microsoft.AspNetCore.SignalR;
 using Play.Common.Identity;
 using Play.Common.MassTransit;
 using Play.Common.Mongo;
@@ -11,6 +12,7 @@ using Play.Inventory.Contracts;
 using Play.Trading.Service.Entities;
 using Play.Trading.Service.Exceptions;
 using Play.Trading.Service.Settings;
+using Play.Trading.Service.SignalR;
 using Play.Trading.Service.StateMachines;
 
 var AllowedOriginSetting = "AllowedOrigin";
@@ -24,7 +26,9 @@ var queueSettings = builder.Configuration.GetSection(nameof(QueueSettings)).Get<
 
 builder.Services
     .AddMongo(builder.Configuration, serviceSettings.ServiceName)
-    .AddMongoRepository<CatalogItem>("catalogItems");
+    .AddMongoRepository<CatalogItem>("catalogItems")
+    .AddMongoRepository<InventoryItem>("inventoryItems")
+    .AddMongoRepository<ApplicationUser>("users");
 
 builder.Services.AddJwtBearerAuthentication();
 
@@ -62,6 +66,10 @@ builder.Services.AddControllers(opts =>
 })
 .AddJsonOptions(options => options.JsonSerializerOptions.IgnoreNullValues = true);
 
+builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
+builder.Services.AddSingleton<MessageHub>();
+builder.Services.AddSignalR();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -77,7 +85,8 @@ if (app.Environment.IsDevelopment())
     {
         builder.WithOrigins(app.Configuration[AllowedOriginSetting])
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials(); // Required for SignalR - cookie based auth
     });
 }
 
@@ -87,5 +96,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<MessageHub>("/messageHub");
 
 app.Run();
